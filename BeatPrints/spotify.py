@@ -20,6 +20,10 @@ from BeatPrints.errors import (
     InvalidSearchLimit,
 )
 
+import requests
+from pathlib import Path
+import tempfile
+
 
 @dataclass
 class TrackMetadata:
@@ -244,3 +248,18 @@ class Spotify:
                 albumlist.append(AlbumMetadata(**metadata))
 
         return albumlist
+    def download_image_from_url(url: str) -> Path:
+        """
+        Downloads an image from a given URL and returns the path to the saved image.
+        The image is saved to a temporary directory.
+    """
+        response = requests.get(url)
+        response.raise_for_status()
+
+        temp_dir = Path(tempfile.mkdtemp(prefix="beatprints_img_"))
+        image_path = temp_dir / "album_art.jpg"
+
+        with open(image_path, "wb") as f:
+            f.write(response.content)
+            
+        return image_path
