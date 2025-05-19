@@ -43,9 +43,7 @@ def gowallify(image_path: Path, theme: str = "Light") -> Path:
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"GoWall command failed: {e}") from e
-
     return output_path
-
 
 def cleanup_temp_dir(temp_path: Path):
     """
